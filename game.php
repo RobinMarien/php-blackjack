@@ -24,36 +24,22 @@ if (isset($_REQUEST['btn_submit'])) {
         $_SESSION["Player"] = $Player->getScore();
 
         if ($Player->getScore() > 21){
-            echo "You lost";
+            $end = "You lost";
             session_destroy();
         }
         else if ($Player->getScore() == 21) {
-            echo "Blackjack! You won";
+            $end = "Blackjack! You won";
             session_destroy();
         }
     }
 
     if ($_REQUEST['btn_submit'] == "STAND") {
-        do {
-            $Dealer->hit();
-            $_SESSION["Dealer"] = $Dealer->getScore();
-        }
-        while
-            ($Dealer->getScore() < 15);
-
-        if ($Dealer->getScore() > 21){
-            echo "You won";
-            session_destroy();
-        }
-
-        else if (($Player->getScore()) > ($Dealer->getScore())){
-            echo "You won";
-            session_destroy();
-        }
+        $Player->stand($Dealer,$Player);
     }
 
     if ($_REQUEST['btn_submit'] == "SURRENDER") {
-        session_destroy();
+        $Player->surrender();
+        echo "Why is this even an option?";
         }
 }
 
@@ -74,42 +60,41 @@ if (isset($_REQUEST['btn_submit'])) {
     </head>
     <body>
 
-    <div class="container text-center">
-        <div class="col-md-12">
+    <div class="container text-center my-5">
+        <div class="col-md-12 my-3">
             <h1>BLACKJACK</h1>
         </div>
-        <div class="row">
-            <div class="col-md-6">
+        <div class="row ">
+            <div class="col-md-6 my-3">
                 <h3>PLAYER</h3>
-                <p></p>
+                <p class="my-3">
+                    Your score:
+                    <span>
+                        <?php echo $Player->getScore()?>
+                    </span>
+                </p>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 my-3">
                 <h3>DEALER</h3>
-
+                <p class="my-3">
+                    Dealer score:
+                    <span>
+                        <?php echo $Dealer->getScore()?>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 my-5">
+                <form action="game.php" method="POST">
+                    <input type="submit" name="btn_submit" value="HIT">
+                    <input type="submit" name="btn_submit" value="STAND"/>
+                    <input type="submit" name="btn_submit" value="SURRENDER">
+                </form>
             </div>
         </div>
 
     </div>
-    <form action="game.php" method="POST">
-        <input type="submit" name="btn_submit" value="HIT">
-        <input type="submit" name="btn_submit" value="STAND"/>
-        <input type="submit" name="btn_submit" value="SURRENDER">
-    </form>
+
     </body>
     </html>
-
-<?php
-function whatIsHappening()
-{
-    echo '<h2>$_GET</h2>';
-    var_dump($_GET);
-    echo '<h2>$_POST</h2>';
-    var_dump($_POST);
-    echo '<h2>$_COOKIE</h2>';
-    var_dump($_COOKIE);
-    echo '<h2>$_SESSION</h2>';
-    var_dump($_SESSION);
-}
-
-whatIsHappening();
-?>
