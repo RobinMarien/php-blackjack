@@ -4,11 +4,11 @@ require 'classes/blackjack.php';
 
 session_start();
 
-if (isset($_SESSION["player"])) {
-    $Player = new Blackjack($_SESSION["player"]);
+if (isset($_SESSION["Player"])) {
+    $Player = new Blackjack($_SESSION["Player"]);
 } else{
-    $_SESSION["player"] = 0;
-    $Player = new Blackjack($_SESSION["player"]);
+    $_SESSION["Player"] = 0;
+    $Player = new Blackjack($_SESSION["Player"]);
 }
 
 if (isset($_SESSION["Dealer"])) {
@@ -21,12 +21,34 @@ if (isset($_SESSION["Dealer"])) {
 if (isset($_REQUEST['btn_submit'])) {
     if ($_REQUEST['btn_submit'] == "HIT") {
         $Player->hit();
-        $_SESSION["player"] = $Player->getScore();
+        $_SESSION["Player"] = $Player->getScore();
 
         if ($Player->getScore() > 21){
             echo "You lost";
         }
     }
+
+    if ($_REQUEST['btn_submit'] == "STAND") {
+        do {
+            $Dealer->hit();
+            $_SESSION["Dealer"] = $Dealer->getScore();
+        }
+        while
+            ($Dealer->getScore() < 15);
+
+        if ($Dealer->getScore())
+    }
+
+    if ($_REQUEST['btn_submit'] == "SURRENDER") {
+        $Player->hit();
+        $_SESSION["Player"] = $Player->getScore();
+
+        if ($Player->getScore() > 21){
+            echo "You lost";
+        }
+    }
+
+
 }
 
 ?>
